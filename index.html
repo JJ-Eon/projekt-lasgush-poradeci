@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shkolla Lasgush Poradeci</title>
+    <meta name="description" content="Faqja zyrtare e Shkollës 9-vjeçare 'Lasgush Poradeci' - Institucion Arsimor Publik.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons (Vanilla) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            },
+            colors: {
+              primary: {
+                50: '#faf6f3',  /* Very warm white */
+                100: '#f5efe9', /* Light beige */
+                200: '#e6d8cc',
+                300: '#d5bba8',
+                400: '#c29d82',
+                500: '#a67c52', /* Medium wood */
+                600: '#8a6242', /* Wood */
+                700: '#734e35', /* Dark wood */
+                800: '#5e402e',
+                900: '#4d3528', /* Very dark wood */
+                950: '#2a1b15',
+              },
+              accent: {
+                50: '#fffbeb',
+                100: '#fef3c7',
+                500: '#d97706', /* Warm Amber */
+                600: '#b45309',
+                700: '#92400e',
+              },
+              stone: {
+                50: '#fafaf9',
+                100: '#f5f5f4',
+                200: '#e7e5e4',
+                800: '#292524',
+                900: '#1c1917',
+              }
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+              'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'pulse-slow': 'pulse 3s infinite',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideInRight: {
+                '0%': { opacity: '0', transform: 'translateX(20px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        --base-font-size: 16px;
+      }
+      
+      html {
+        font-size: var(--base-font-size);
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+
+      /* Keyboard Accessibility: Visible Focus */
+      *:focus-visible {
+        outline: 3px solid #d97706;
+        outline-offset: 2px;
+      }
+      
+      /* Skip Link */
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        z-index: 100;
+        background: #fff;
+        padding: 1rem;
+        font-weight: bold;
+        transition: top 0.3s;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+
+      /* High Contrast Mode Overrides */
+      body.high-contrast {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+      
+      body.high-contrast * {
+        border-color: #000000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+
+      body.high-contrast .bg-primary-800,
+      body.high-contrast .bg-primary-900,
+      body.high-contrast .bg-primary-950,
+      body.high-contrast .bg-accent-600 {
+        background-color: #000000 !important;
+        color: #ffff00 !important; /* Yellow text on black for readability */
+        border: 2px solid #ffffff !important;
+      }
+      
+      body.high-contrast .text-primary-100,
+      body.high-contrast .text-primary-200,
+      body.high-contrast .text-white,
+      body.high-contrast .text-[#fdfbf7] {
+        color: #ffff00 !important;
+      }
+
+      body.high-contrast .bg-white,
+      body.high-contrast .bg-primary-50,
+      body.high-contrast .bg-[#faf6f3],
+      body.high-contrast .bg-white\/95 {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+      }
+
+      body.high-contrast a,
+      body.high-contrast button {
+        text-decoration: underline;
+        font-weight: 700;
+      }
+      
+      body.high-contrast .pattern-dots,
+      body.high-contrast .absolute.opacity-20 {
+        display: none !important;
+      }
+      
+      /* Scroll Reveal Classes */
+      .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1), transform 0.8s cubic-bezier(0.5, 0, 0, 1);
+      }
+      .reveal-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Page Transitions */
+      .page-section {
+        transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        width: 100%;
+      }
+      
+      /* Staggered delays */
+      .delay-100 { transition-delay: 100ms; }
+      .delay-200 { transition-delay: 200ms; }
+      .delay-300 { transition-delay: 300ms; }
+
+      /* Markdown Styles inside chat */
+      .chat-content strong { font-weight: 700; color: #5e402e; }
+      .chat-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; }
+      .chat-content li { margin-bottom: 0.25rem; }
+      
+      /* Typing Indicator */
+      .typing-dot {
+        animation: typing 1.4s infinite ease-in-out both;
+      }
+      .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+      .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+      
+      @keyframes typing {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+      }
+
+      /* CSS Pattern for backgrounds */
+      .pattern-dots {
+        background-image: radial-gradient(#ffffff 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-[#faf6f3] text-stone-900 min-h-screen flex flex-col overflow-x-hidden selection:bg-accent-200 selection:text-primary-900">
+
+    <!-- Skip to Main Content Link -->
+    <a href="#main-content" class="skip-link text-primary-900 focus:outline-none focus:ring-4 focus:ring-accent-500 rounded-br-lg shadow-xl">
+      Kalo te përmbajtja kryesore
+    </a>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-28 right-4 z-[70] transform translate-x-full transition-transform duration-300 ease-out pointer-events-none" role="alert" aria-live="assertive">
+      <div class="bg-white text-stone-800 px-6 py-4 rounded-xl shadow-2xl flex items-center border border-primary-100 border-l-4 border-l-accent-500 pointer-events-auto">
+        <div class="bg-accent-50 p-2 rounded-full mr-3">
+          <i data-lucide="check-circle" class="h-6 w-6 text-accent-600"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-primary-900">Mesazhi u dërgua!</h4>
+          <p class="text-xs text-stone-500 mt-0.5">Stafi ynë do t'ju kontaktojë së shpejti.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-primary-100 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="app.navigateTo('home')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') app.navigateTo('home')">
+            <div class="bg-primary-100 p-2.5 rounded-xl mr-3 group-hover:bg-primary-800 group-hover:text-white transition-all duration-300 shadow-sm">
+              <i data-lucide="graduation-cap" class="h-6 w-6 text-primary-700 group-hover:text-white transition-colors"></i>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-bold text-xl sm:text-2xl text-primary-900 tracking-tight leading-none">Shkolla "Lasgush Poradeci"</span>
+              <span class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-0.5">Edukimi për të ardhmen</span>
+            </div>
+          </div>
+
+          <!-- Desktop Nav -->
+          <nav class="hidden md:flex items-center space-x-1 bg-primary-50/50 p-1.5 rounded-full border border-primary-100/50" aria-label="Navigimi Kryesor">
+            <button onclick="app.navigateTo('home')" class="nav-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 relative overflow-hidden group" data-page="home">
+              <span class="relative z-10 flex items-center gap-2"><i data-lucide="home" class="h-4 w-4"></i> Kreu</span>
+              <div class="absolute inset-0 bg-white shadow-sm border border-primary-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
+            </button>
+            <button onclick="app.navigateTo('library')" class="nav-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 relative overflow-hidden group" data-page="library">
+              <span class="relative z-10 flex items-center gap-2"><i data-lucide="book" class="h-4 w-4"></i> Biblioteka</span>
+              <div class="absolute inset-0 bg-white shadow-sm border border-primary-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
+            </button>
+            <button onclick="app.navigateTo('contact')" class="nav-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 relative overflow-hidden group" data-page="contact">
+              <span class="relative z-10 flex items-center gap-2"><i data-lucide="mail" class="h-4 w-4"></i> Kontakt</span>
+              <div class="absolute inset-0 bg-white shadow-sm border border-primary-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
+            </button>
+          </nav>
+
+          <!-- Mobile Menu Button -->
+          <div class="flex items-center md:hidden">
+            <button onclick="app.toggleMobileMenu()" class="p-2.5 rounded-xl text-stone-600 hover:text-primary-700 hover:bg-primary-50 focus:outline-none transition-colors border border-transparent hover:border-primary-100" aria-label="Hap menunë" aria-expanded="false" id="mobile-menu-btn">
+              <i data-lucide="menu" class="h-6 w-6"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Nav -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white/98 backdrop-blur-xl border-t border-primary-100 shadow-xl absolute w-full z-50 origin-top animate-fade-in-up" role="navigation" aria-labelledby="mobile-menu-btn">
+        <div class="px-4 pt-4 pb-6 space-y-2">
+          <button onclick="app.navigateTo('home')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all flex items-center gap-3" data-page="home">
+            <i data-lucide="home" class="h-5 w-5 opacity-70"></i> Kreu
+          </button>
+          <button onclick="app.navigateTo('library')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all flex items-center gap-3" data-page="library">
+            <i data-lucide="book" class="h-5 w-5 opacity-70"></i> Biblioteka
+          </button>
+          <button onclick="app.navigateTo('contact')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all flex items-center gap-3" data-page="contact">
+            <i data-lucide="mail" class="h-5 w-5 opacity-70"></i> Kontakt
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="flex-grow relative" tabindex="-1">
+      
+      <!-- HOME PAGE -->
+      <div id="page-home" class="page-section">
+        <!-- Hero -->
+        <div class="relative bg-primary-800 overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center">
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0 opacity-20 pointer-events-none">
+             <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#d6b498] rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+             <div class="absolute top-32 right-12 w-72 h-72 bg-accent-600 rounded-full mix-blend-overlay filter blur-3xl opacity-40 animate-pulse-slow"></div>
+             <div class="absolute bottom-0 left-1/2 w-full h-40 bg-gradient-to-t from-primary-800 to-transparent"></div>
+          </div>
+          
+          <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 w-full z-10">
+            <div class="text-center">
+              <h1 class="text-4xl tracking-tight font-extrabold text-[#fdfbf7] sm:text-5xl lg:text-7xl font-serif reveal-on-scroll delay-100 drop-shadow-sm">
+                <span class="block">Shkolla 9-vjeçare "Lasgush Poradeci"</span>
+                <span class="block text-primary-200 mt-4 text-2xl sm:text-3xl font-sans font-normal tracking-wide opacity-90">Institucion Arsimor Publik</span>
+              </h1>
+              <p class="mt-8 max-w-md mx-auto text-base text-primary-100 sm:text-lg md:text-xl md:max-w-3xl leading-relaxed reveal-on-scroll delay-200">
+                Mirësevini në vatrën e dijes. Ne ofrojmë një mjedis gjithëpërfshirës ku çdo nxënës inkurajohet të zbulojë potencialin e tij të plotë.
+              </p>
+              <div class="mt-12 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center gap-4 reveal-on-scroll delay-300">
+                <button onclick="app.navigateTo('library')" class="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-full text-primary-900 bg-[#fdfbf7] hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] md:px-10">
+                  <i data-lucide="book-open" class="mr-2 h-5 w-5 text-primary-700"></i>
+                  Biblioteka Digjitale
+                </button>
+                <button onclick="app.navigateTo('contact')" class="w-full mt-4 sm:mt-0 flex items-center justify-center px-8 py-4 border border-primary-300/30 bg-primary-700/30 backdrop-blur-sm text-lg font-bold rounded-full text-white hover:bg-white hover:text-primary-900 transition-all duration-300 md:px-10">
+                  Na Kontaktoni
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <section class="py-16 md:py-24 bg-[#faf6f3]">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 reveal-on-scroll">
+              <h2 class="text-3xl font-serif font-bold text-primary-900">Vlerat Tona</h2>
+              <div class="h-1 w-24 bg-accent-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              <!-- Card 1 -->
+              <div class="bg-white rounded-3xl shadow-sm p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-500 border border-primary-100 group reveal-on-scroll delay-100">
+                <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 text-primary-700 group-hover:bg-primary-700 group-hover:text-white transition-colors duration-300 shadow-inner group-hover:rotate-3 transform">
+                  <i data-lucide="graduation-cap" class="h-8 w-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-primary-900 mb-3 group-hover:text-accent-600 transition-colors">Stafi Pedagogjik</h3>
+                <p class="text-stone-600 leading-relaxed">Mësues të kualifikuar dhe me përvojë që përkushtohen për suksesin akademik dhe social të çdo nxënësi.</p>
+              </div>
+              <!-- Card 2 -->
+              <div class="bg-white rounded-3xl shadow-sm p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-500 border border-primary-100 group reveal-on-scroll delay-200">
+                <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 text-primary-700 group-hover:bg-primary-700 group-hover:text-white transition-colors duration-300 shadow-inner group-hover:rotate-3 transform">
+                  <i data-lucide="monitor" class="h-8 w-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-primary-900 mb-3 group-hover:text-accent-600 transition-colors">Teknologji Moderne</h3>
+                <p class="text-stone-600 leading-relaxed">Laboratorë bashkëkohorë për informatikë dhe shkenca natyrore të pajisura plotësisht për mësimin praktik.</p>
+              </div>
+              <!-- Card 3 -->
+              <div class="bg-white rounded-3xl shadow-sm p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-500 border border-primary-100 group reveal-on-scroll delay-300 sm:col-span-2 lg:col-span-1">
+                <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 text-primary-700 group-hover:bg-primary-700 group-hover:text-white transition-colors duration-300 shadow-inner group-hover:rotate-3 transform">
+                  <i data-lucide="users" class="h-8 w-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-primary-900 mb-3 group-hover:text-accent-600 transition-colors">Komunitet Aktiv</h3>
+                <p class="text-stone-600 leading-relaxed">Ambiente sportive, klube artistike dhe aktivitete jashtëshkollore që nxisin talentin dhe bashkëpunimin.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Library CTA -->
+        <div class="bg-primary-50 py-16 md:py-24 border-t border-primary-100">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-primary-800 to-primary-950 rounded-3xl shadow-2xl overflow-hidden border border-primary-700 reveal-on-scroll">
+              <div class="px-6 py-12 md:p-16 text-center md:text-left md:flex md:items-center md:justify-between relative group">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-5 transition-transform duration-700 group-hover:scale-150"></div>
+                <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-40 h-40 rounded-full bg-accent-600 opacity-10 blur-2xl"></div>
+                
+                <div class="md:w-2/3 z-10">
+                  <div class="flex items-center justify-center md:justify-start mb-4">
+                    <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm mr-4">
+                       <i data-lucide="book-marked" class="h-8 w-8 text-accent-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-[#fdfbf7] sm:text-3xl font-serif tracking-wide">Biblioteka Digjitale</h2>
+                  </div>
+                  <p class="mt-4 text-lg text-primary-100/90 leading-relaxed max-w-2xl">
+                    Sistemi ynë i ri i menaxhimit të bibliotekës është tani online. Rezervoni libra, kontrolloni afatet dhe eksploroni katalogun nga shtëpia.
+                  </p>
+                </div>
+                <div class="mt-10 md:mt-0 md:ml-8 flex justify-center z-10">
+                  <a href="library/index.html" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl text-white bg-accent-600 hover:bg-accent-700 transition-all duration-300 shadow-lg hover:shadow-accent-500/30 transform hover:-translate-y-1">
+                    Hyni në Sistem
+                    <i data-lucide="arrow-right" class="ml-2 h-5 w-5"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIBRARY PAGE -->
+      <div id="page-library" class="page-section hidden pt-8 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center min-h-[70vh]">
+          
+          <div class="text-center mb-12 reveal-on-scroll">
+            <h2 class="text-4xl font-serif font-bold text-primary-900 mb-4">Biblioteka & Arkiva</h2>
+            <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+              Porta juaj drejt dijes. Shfletoni katalogun tonë fizik dhe digjital.
+            </p>
+          </div>
+
+          <div class="bg-gradient-to-br from-primary-800 to-primary-950 rounded-3xl shadow-2xl overflow-hidden border border-primary-700 relative min-h-[450px] flex flex-col justify-center reveal-on-scroll delay-100 group">
+             <!-- Background Image Overlay (Replaced with CSS Pattern) -->
+             <div class="absolute inset-0 pattern-dots opacity-10 group-hover:opacity-20 transition-opacity duration-1000 scale-105"></div>
+             
+             <div class="px-6 py-12 md:p-20 text-center md:text-left md:flex md:items-center md:justify-between relative z-10">
+              <div class="md:w-2/3">
+                <div class="flex items-center justify-center md:justify-start mb-6">
+                  <div class="bg-accent-500/20 p-3.5 rounded-xl backdrop-blur-md border border-accent-500/30 mr-4 shadow-lg">
+                    <i data-lucide="book-marked" class="h-10 w-10 text-accent-400"></i>
+                  </div>
+                  <div>
+                    <h2 class="text-3xl font-bold text-white sm:text-4xl font-serif">Hyni në Panel</h2>
+                    <div class="h-1 w-20 bg-accent-500 mt-2 rounded-full"></div>
+                  </div>
+                </div>
+                <p class="mt-6 text-xl text-primary-100/90 leading-relaxed max-w-xl">
+                  Platforma e integruar për menaxhimin e bibliotekës.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                   <div class="flex items-center bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/10">
+                      <i data-lucide="check" class="h-4 w-4 mr-2 text-accent-400"></i> <span class="text-primary-100 text-sm">Katalogu 24/7</span>
+                   </div>
+                   <div class="flex items-center bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/10">
+                      <i data-lucide="check" class="h-4 w-4 mr-2 text-accent-400"></i> <span class="text-primary-100 text-sm">Rezervim Online</span>
+                   </div>
+                </div>
+              </div>
+              
+              <div class="mt-12 md:mt-0 md:ml-12 flex justify-center">
+                <a href="library/index.html" class="group/btn relative inline-flex items-center px-10 py-5 border border-transparent text-xl font-bold rounded-2xl text-white bg-accent-600 hover:bg-accent-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 overflow-hidden">
+                  <span class="relative z-10 flex items-center">
+                    Hyni në Sistem
+                    <i data-lucide="arrow-right" class="ml-2 h-6 w-6 group-hover/btn:translate-x-1 transition-transform"></i>
+                  </span>
+                  <div class="absolute inset-0 bg-gradient-to-r from-accent-500 to-accent-700 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-on-scroll delay-200">
+            <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm flex items-center hover:shadow-md transition-shadow">
+               <div class="bg-primary-100 p-3 rounded-full mr-4 text-primary-700"><i data-lucide="clock" class="h-6 w-6"></i></div>
+               <div><p class="text-sm text-stone-500 uppercase font-bold tracking-wider">Orari</p><p class="font-bold text-primary-900 text-lg">Hënë - Premte: 09:00 - 14:00</p></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm flex items-center hover:shadow-md transition-shadow">
+               <div class="bg-primary-100 p-3 rounded-full mr-4 text-primary-700"><i data-lucide="map-pin" class="h-6 w-6"></i></div>
+               <div><p class="text-sm text-stone-500 uppercase font-bold tracking-wider">Vendndodhja</p><p class="font-bold text-primary-900 text-lg">Kati i 2-të, Krahu Lindor</p></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm flex items-center hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
+               <div class="bg-primary-100 p-3 rounded-full mr-4 text-primary-700"><i data-lucide="file-text" class="h-6 w-6"></i></div>
+               <div><p class="text-sm text-stone-500 uppercase font-bold tracking-wider">Rregullorja</p><p class="font-bold text-primary-900 text-lg">Afati i tërheqjes: 14 ditë</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT PAGE -->
+      <div id="page-contact" class="page-section hidden">
+        <div class="bg-[#faf6f3] py-16 min-h-[80vh]">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+              <h2 class="text-4xl font-extrabold text-primary-900 font-serif">Na Kontaktoni</h2>
+              <p class="mt-4 text-xl text-stone-600 max-w-2xl mx-auto">
+                Keni pyetje? Jemi këtu për t'ju ndihmuar. Plotësoni formularin ose na vizitoni në shkollë.
+              </p>
+            </div>
+    
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              
+              <!-- Left Column: Form -->
+              <div class="bg-white p-8 md:p-10 rounded-3xl border border-primary-100 shadow-lg reveal-on-scroll delay-100 h-fit">
+                <h3 class="text-2xl font-bold text-primary-800 mb-2">Dërgoni një mesazh</h3>
+                <p class="text-stone-500 mb-8">Do t'ju kthejmë përgjigje sa më shpejt të jetë e mundur.</p>
+                
+                <form id="contact-form" onsubmit="event.preventDefault(); app.handleContactSubmit();" class="space-y-6">
+                  <div>
+                    <label for="name" class="block text-sm font-medium text-primary-900 mb-1">Emri i plotë</label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-primary-400">
+                        <i data-lucide="user" class="h-5 w-5"></i>
+                      </div>
+                      <input type="text" id="name" required class="w-full pl-10 pr-4 py-3 rounded-xl bg-primary-50 border border-primary-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-200 outline-none transition-all text-stone-800 placeholder-primary-300" placeholder="Emri Mbiemri">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-primary-900 mb-1">Email</label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-primary-400">
+                        <i data-lucide="mail" class="h-5 w-5"></i>
+                      </div>
+                       <input type="email" id="email" required class="w-full pl-10 pr-4 py-3 rounded-xl bg-primary-50 border border-primary-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-200 outline-none transition-all text-stone-800 placeholder-primary-300" placeholder="emri@shembull.com">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="message" class="block text-sm font-medium text-primary-900 mb-1">Mesazhi</label>
+                    <textarea id="message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-primary-50 border border-primary-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-200 outline-none transition-all text-stone-800 placeholder-primary-300 resize-none" placeholder="Si mund t'ju ndihmojmë?"></textarea>
+                  </div>
+                  <button type="submit" class="w-full py-4 px-6 rounded-xl bg-primary-800 text-white font-bold hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 transition-all duration-300 shadow-md transform hover:-translate-y-0.5 flex justify-center items-center group">
+                    <span>Dërgo Mesazhin</span>
+                    <i data-lucide="send" class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                </form>
+              </div>
+
+              <!-- Right Column: Info & Map -->
+              <div class="space-y-6 reveal-on-scroll delay-200">
+                <!-- Info Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center mb-4 text-accent-700">
+                       <i data-lucide="phone" class="h-5 w-5"></i>
+                    </div>
+                    <h5 class="font-bold text-primary-900">Telefoni</h5>
+                    <p class="text-sm text-stone-600 mt-1 hover:text-accent-600 cursor-pointer" tabindex="0">+355 4 222 3333</p>
+                  </div>
+                  <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center mb-4 text-accent-700">
+                       <i data-lucide="mail" class="h-5 w-5"></i>
+                    </div>
+                    <h5 class="font-bold text-primary-900">Email</h5>
+                    <p class="text-sm text-stone-600 mt-1 hover:text-accent-600 cursor-pointer" tabindex="0">info@shkollaLasgush Poradeci.edu.al</p>
+                  </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm hover:shadow-md transition-all flex items-start">
+                   <div class="w-10 h-10 bg-accent-100 rounded-lg flex-shrink-0 flex items-center justify-center mr-4 text-accent-700">
+                      <i data-lucide="map-pin" class="h-5 w-5"></i>
+                   </div>
+                   <div>
+                      <h5 class="font-bold text-primary-900">Adresa</h5>
+                      <p class="text-sm text-stone-600 mt-1">Rruga Llambi Bonata, Kombinat, Tiranë</p>
+                   </div>
+                </div>
+
+                <!-- Map -->
+                <div class="rounded-3xl overflow-hidden border-4 border-white shadow-xl h-[350px] bg-primary-50 relative group">
+                   <iframe 
+                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2997.0655677027583!2d19.77093287664654!3d41.3072741009581!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13503046a3666011%3A0x6739665d93370327!2sShkolla%209-vje%C3%A7are%20%22Lasgush%20Poradeci%22!5e0!3m2!1sq!2sal!4v1715000000000!5m2!1sq!2sal" 
+                     width="100%" 
+                     height="100%" 
+                     style="border:0;" 
+                     allowfullscreen="" 
+                     loading="lazy" 
+                     referrerpolicy="no-referrer-when-downgrade"
+                     title="Vendndodhja e Shkollës Lasgush Poradeci"
+                     class="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+                   ></iframe>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-950 text-primary-100 py-16 border-t border-primary-900 relative overflow-hidden">
+      <!-- Footer Background Pattern -->
+      <div class="absolute inset-0 opacity-5 pointer-events-none">
+          <div class="absolute right-0 bottom-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12">
+          <div class="col-span-1 sm:col-span-2">
+            <div class="flex items-center mb-6">
+              <div class="bg-primary-900 p-2 rounded-xl mr-3">
+                <i data-lucide="graduation-cap" class="h-6 w-6 text-white"></i>
+              </div>
+              <h3 class="text-white text-xl font-bold font-serif tracking-wide">Shkolla Lasgush Poradeci</h3>
+            </div>
+            <p class="text-sm leading-loose opacity-80 max-w-sm">
+              Një vatër e edukimit dhe kulturës. Ne besojmë se çdo nxënës ka potencialin për të ndryshuar botën. Bashkohuni me ne në rrugëtimin drejt dijes.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-white font-bold mb-6 border-b border-primary-800 pb-2 inline-block">Menu e Shpejtë</h4>
+            <ul class="space-y-3 text-sm">
+              <li><button onclick="app.navigateTo('home')" class="hover:text-accent-400 hover:translate-x-1 transition-all flex items-center"><i data-lucide="chevron-right" class="h-3 w-3 mr-2 opacity-50"></i>Kreu</button></li>
+              <li><button onclick="app.navigateTo('library')" class="hover:text-accent-400 hover:translate-x-1 transition-all flex items-center"><i data-lucide="chevron-right" class="h-3 w-3 mr-2 opacity-50"></i>Biblioteka</button></li>
+              <li><button onclick="app.navigateTo('contact')" class="hover:text-accent-400 hover:translate-x-1 transition-all flex items-center"><i data-lucide="chevron-right" class="h-3 w-3 mr-2 opacity-50"></i>Kontakt</button></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-white font-bold mb-6 border-b border-primary-800 pb-2 inline-block">Orari</h4>
+            <ul class="space-y-3 text-sm">
+              <li class="flex justify-between items-center text-primary-200">
+                <span>Hënë - Premte</span>
+                <span class="font-mono bg-primary-900 px-2 py-1 rounded text-xs">08:00 - 16:00</span>
+              </li>
+              <li class="flex justify-between items-center text-primary-200">
+                <span>Fundjava</span>
+                <span class="text-accent-500 font-bold text-xs uppercase">Mbyllur</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-primary-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs opacity-60">
+          <p>&copy; <span id="year"></span> Shkolla 9-Vjeçare Lasgush Poradeci 2026. Të gjitha të drejtat e rezervuara.</p>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+             <a href="#" class="hover:text-white transition-colors">Privatësia</a>
+             <a href="#" class="hover:text-white transition-colors">Kushtet</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Chat Widget -->
+    <div id="chat-widget-container" class="fixed bottom-6 right-6 z-[60]">
+      <!-- Chat Toggle Button -->
+      <button id="chat-toggle-btn" onclick="app.toggleChat()" class="bg-primary-600 hover:bg-primary-700 text-white rounded-full p-4 shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-all hover:scale-110 flex items-center justify-center group border-2 border-primary-500 relative overflow-hidden" aria-label="Hap asistentin">
+        <div class="absolute inset-0 bg-gradient-to-tr from-transparent to-white opacity-20 group-hover:opacity-30 transition-opacity"></div>
+        <i data-lucide="message-circle" class="h-8 w-8 relative z-10"></i>
+        <span class="absolute right-full mr-4 bg-primary-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap shadow-lg translate-x-2 group-hover:translate-x-0">
+          Asistenti Digjital
+        </span>
+      </button>
+
+      <!-- Chat Window -->
+      <div id="chat-window" class="hidden bg-[#fdfbf7] rounded-2xl shadow-2xl w-[90vw] sm:w-[380px] h-[500px] max-h-[calc(100vh-120px)] flex flex-col border border-primary-200 overflow-hidden origin-bottom-right transition-all duration-300" role="dialog" aria-modal="true" aria-labelledby="chat-title">
+        <div class="bg-primary-800 p-4 flex justify-between items-center text-white relative overflow-hidden shrink-0">
+          <div class="absolute inset-0 bg-accent-600 opacity-10 blur-xl"></div>
+          <div class="flex items-center space-x-3 relative z-10">
+            <div class="bg-white/10 p-1.5 rounded-lg">
+               <i data-lucide="sparkles" class="h-5 w-5 text-accent-400"></i>
+            </div>
+            <div>
+              <h3 id="chat-title" class="font-bold text-sm tracking-wide">Asistenti Lasgush Poradeci</h3>
+              <div class="flex items-center space-x-1">
+                 <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                 <p class="text-[10px] text-primary-200 uppercase tracking-wider font-semibold">Online</p>
+              </div>
+            </div>
+          </div>
+          <button onclick="app.toggleChat()" class="text-primary-200 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all relative z-10" aria-label="Mbyll asistentin">
+            <i data-lucide="x" class="h-5 w-5"></i>
+          </button>
+        </div>
+        
+        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto bg-[#faf6f3] space-y-4" role="log" aria-live="polite">
+          <!-- Messages will be injected here -->
+        </div>
+
+        <div class="p-3 bg-white border-t border-primary-100 shrink-0">
+          <div class="flex items-center space-x-2 bg-primary-50 rounded-full px-4 py-2 border border-primary-100 focus-within:ring-2 focus-within:ring-primary-200 focus-within:border-primary-300 transition-all">
+            <input id="chat-input" type="text" placeholder="Shkruani pyetjen tuaj..." class="flex-grow bg-transparent border-none focus:outline-none text-sm text-stone-800 placeholder-primary-300" onkeydown="if(event.key === 'Enter') app.sendMessage()" aria-label="Mesazhi juaj">
+            <button id="send-btn" onclick="app.sendMessage()" class="text-primary-600 hover:text-accent-600 hover:bg-primary-100 p-2 rounded-full transition-colors disabled:opacity-50" aria-label="Dërgo">
+              <i data-lucide="send" class="h-4 w-4 transform group-hover:translate-x-0.5 transition-transform"></i>
+            </button>
+          </div>
+          <div class="text-center mt-2">
+             <p class="text-[10px] text-primary-300">Asistenti Virtual</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility Widget -->
+    <div class="fixed bottom-6 left-6 z-[60] flex flex-col items-start gap-2 group/a11y">
+      <!-- Menu -->
+      <div id="a11y-menu" class="hidden bg-white/95 backdrop-blur-md border border-primary-200 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] mb-3 flex-col gap-4 min-w-[260px] origin-bottom-left transition-all duration-300 animate-fade-in-up" role="dialog" aria-label="Opsionet e Aksesueshmërisë">
+        <div class="flex items-center justify-between border-b border-primary-100 pb-3">
+          <div class="flex items-center gap-2 text-primary-900">
+             <i data-lucide="eye" class="h-5 w-5 text-accent-600"></i>
+             <span class="font-bold">Aksesueshmëria</span>
+          </div>
+          <button onclick="app.toggleA11yMenu()" class="text-stone-400 hover:text-stone-600 p-1 hover:bg-stone-100 rounded-full transition-colors" aria-label="Mbyll">
+             <i data-lucide="x" class="h-4 w-4"></i>
+          </button>
+        </div>
+        
+        <!-- Text Size -->
+        <div class="space-y-2">
+           <label class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Madhësia e Tekstit</label>
+           <div class="bg-primary-50 rounded-xl p-1 flex border border-primary-100">
+             <button onclick="app.adjustFontSize(-1)" class="flex-1 py-2 rounded-lg hover:bg-white hover:shadow-sm text-primary-900 font-medium transition-all flex items-center justify-center border border-transparent focus:ring-2 focus:ring-accent-500" aria-label="Zvogëlo tekstin">
+               <span class="text-xs">A-</span>
+             </button>
+             <div class="w-px bg-primary-200 my-1 mx-1"></div>
+             <button onclick="app.resetFontSize()" class="flex-1 py-2 rounded-lg hover:bg-white hover:shadow-sm text-primary-900 font-medium transition-all flex items-center justify-center border border-transparent focus:ring-2 focus:ring-accent-500" aria-label="Rivendos tekstin">
+               <span class="text-sm font-bold">A</span>
+             </button>
+             <div class="w-px bg-primary-200 my-1 mx-1"></div>
+             <button onclick="app.adjustFontSize(1)" class="flex-1 py-2 rounded-lg hover:bg-white hover:shadow-sm text-primary-900 font-medium transition-all flex items-center justify-center border border-transparent focus:ring-2 focus:ring-accent-500" aria-label="Zmadho tekstin">
+               <span class="text-lg">A+</span>
+             </button>
+           </div>
+        </div>
+    
+        <!-- Contrast -->
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Pamja</label>
+          <button onclick="app.toggleHighContrast()" id="contrast-btn" class="w-full bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-xl p-3 flex items-center justify-between group transition-all" aria-pressed="false">
+             <div class="flex items-center gap-3">
+               <div class="w-8 h-8 rounded-full bg-stone-900 border-2 border-white flex items-center justify-center shadow-sm">
+                  <i data-lucide="sun-moon" class="h-4 w-4 text-yellow-400"></i>
+               </div>
+               <span class="font-medium text-stone-700 group-hover:text-primary-900">Kontrast i Lartë</span>
+             </div>
+             <div id="contrast-toggle-icon" class="w-5 h-5 rounded-full border-2 border-stone-300 transition-colors"></div>
+          </button>
+        </div>
+        
+        <!-- Reset -->
+        <div class="pt-2 border-t border-primary-100 text-center">
+            <button onclick="app.resetAccessibility()" class="text-xs text-stone-500 hover:text-accent-600 font-medium transition-colors flex items-center justify-center gap-1 mx-auto">
+               <i data-lucide="rotate-ccw" class="h-3 w-3"></i>
+               Rivendos të gjitha
+            </button>
+        </div>
+      </div>
+    
+      <!-- Trigger Button -->
+      <button onclick="app.toggleA11yMenu()" class="relative bg-white text-primary-900 p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.25)] hover:scale-105 transition-all duration-300 border border-primary-100 group-hover/a11y:border-accent-200" aria-label="Hap opsionet e aksesueshmërisë" aria-expanded="false">
+        <div class="absolute inset-0 rounded-full bg-accent-50 opacity-0 group-hover/a11y:opacity-100 transition-opacity duration-300 scale-110"></div>
+        <i data-lucide="accessibility" class="h-6 w-6 relative z-10 text-primary-700 group-hover/a11y:text-accent-600 transition-colors"></i>
+        
+        <!-- Tooltip -->
+        <span class="absolute left-full ml-4 top-1/2 -translate-y-1/2 bg-stone-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover/a11y:opacity-100 transition-all whitespace-nowrap shadow-lg -translate-x-2 group-hover/a11y:translate-x-0 pointer-events-none">
+          Aksesueshmëria
+        </span>
+      </button>
+    </div>
+
+    <!-- Application Logic -->
+    <script type="module">
+      // Initialize State
+      const state = {
+        currentPage: 'home',
+        isMenuOpen: false,
+        isChatOpen: false,
+        messages: [],
+        isChatLoading: false,
+        accessibility: {
+            fontSize: 16,
+            highContrast: false,
+            menuOpen: false
+        }
+      };
+
+      // App Logic
+      window.app = {
+        initChat: () => {
+          const hour = new Date().getHours();
+          let greeting = "Përshëndetje! 👋";
+          if (hour >= 5 && hour < 12) greeting = "Mirëmëngjes! ☀️";
+          else if (hour >= 12 && hour < 18) greeting = "Mirëdita! 👋";
+          else greeting = "Mirëmbrëma! 🌙";
+
+          state.messages = [{
+            role: 'model',
+            text: `${greeting} Jam asistenti virtual i Shkollës Lasgush Poradeci. Si mund t'ju ndihmoj sot?`
+          }];
+        },
+
+        initAccessibility: () => {
+             // Load from local storage
+             const saved = localStorage.getItem('Lasgush Poradeci_a11y');
+             if(saved) {
+                 const parsed = JSON.parse(saved);
+                 state.accessibility.fontSize = parsed.fontSize || 16;
+                 state.accessibility.highContrast = parsed.highContrast || false;
+             }
+
+             window.app.applyAccessibility();
+        },
+        
+        applyAccessibility: () => {
+            // Apply Font Size
+            document.documentElement.style.setProperty('--base-font-size', `${state.accessibility.fontSize}px`);
+            
+            // Apply Contrast
+            const body = document.body;
+            const btn = document.getElementById('contrast-btn');
+            const icon = document.getElementById('contrast-toggle-icon');
+            
+            if(state.accessibility.highContrast) {
+                body.classList.add('high-contrast');
+                btn.classList.add('bg-stone-900', 'text-white', 'border-stone-900');
+                btn.classList.remove('bg-primary-50', 'text-stone-700', 'border-primary-200');
+                // Icon state for checked
+                icon.classList.remove('border-stone-300');
+                icon.classList.add('bg-accent-500', 'border-accent-500');
+                btn.setAttribute('aria-pressed', 'true');
+            } else {
+                body.classList.remove('high-contrast');
+                btn.classList.remove('bg-stone-900', 'text-white', 'border-stone-900');
+                btn.classList.add('bg-primary-50', 'text-stone-700', 'border-primary-200');
+                // Icon state for unchecked
+                icon.classList.add('border-stone-300');
+                icon.classList.remove('bg-accent-500', 'border-accent-500');
+                btn.setAttribute('aria-pressed', 'false');
+            }
+            
+            // Save state
+            localStorage.setItem('Lasgush Poradeci_a11y', JSON.stringify({
+                fontSize: state.accessibility.fontSize,
+                highContrast: state.accessibility.highContrast
+            }));
+        },
+
+        toggleA11yMenu: () => {
+            state.accessibility.menuOpen = !state.accessibility.menuOpen;
+            const menu = document.getElementById('a11y-menu');
+            if(state.accessibility.menuOpen) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        },
+        
+        adjustFontSize: (delta) => {
+            const newSize = state.accessibility.fontSize + delta;
+            if (newSize >= 14 && newSize <= 24) {
+                state.accessibility.fontSize = newSize;
+                window.app.applyAccessibility();
+            }
+        },
+
+        resetFontSize: () => {
+            state.accessibility.fontSize = 16;
+            window.app.applyAccessibility();
+        },
+        
+        toggleHighContrast: () => {
+            state.accessibility.highContrast = !state.accessibility.highContrast;
+            window.app.applyAccessibility();
+        },
+        
+        resetAccessibility: () => {
+            state.accessibility.fontSize = 16;
+            state.accessibility.highContrast = false;
+            window.app.applyAccessibility();
+        },
+
+        navigateTo: (pageId) => {
+          if (state.currentPage === pageId) return;
+
+          // Scroll to top smooth
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          // Visual Update Navigation
+          document.querySelectorAll('.nav-btn').forEach(btn => {
+            const isActive = btn.dataset.page === pageId;
+            const bgEl = btn.querySelector('.absolute');
+            
+            if(isActive) {
+              btn.classList.add('text-primary-900');
+              bgEl.classList.remove('opacity-0');
+              bgEl.classList.add('opacity-100');
+              btn.setAttribute('aria-current', 'page');
+            } else {
+              btn.classList.remove('text-primary-900');
+              bgEl.classList.add('opacity-0');
+              bgEl.classList.remove('opacity-100');
+              btn.removeAttribute('aria-current');
+            }
+          });
+          
+          // Mobile Nav Update
+          document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+            if(btn.dataset.page === pageId) {
+              btn.classList.add('text-primary-800', 'bg-primary-50');
+              btn.classList.remove('text-stone-600');
+              btn.setAttribute('aria-current', 'page');
+            } else {
+              btn.classList.remove('text-primary-800', 'bg-primary-50');
+              btn.classList.add('text-stone-600');
+              btn.removeAttribute('aria-current');
+            }
+          });
+
+          // Page Transition Logic
+          const currentEl = document.getElementById(`page-${state.currentPage}`);
+          const nextEl = document.getElementById(`page-${pageId}`);
+
+          // Fade out current
+          currentEl.style.opacity = '0';
+          currentEl.style.transform = 'translateY(-10px)';
+          
+          setTimeout(() => {
+            currentEl.classList.add('hidden');
+            currentEl.style.transform = ''; 
+            currentEl.style.opacity = ''; 
+
+            // Show next
+            nextEl.classList.remove('hidden');
+            nextEl.style.opacity = '0';
+            nextEl.style.transform = 'translateY(10px)';
+            
+            // Trigger reflow
+            void nextEl.offsetWidth; 
+            
+            nextEl.style.opacity = '1';
+            nextEl.style.transform = 'translateY(0)';
+            
+            // Focus management for accessibility
+            document.getElementById('main-content').focus();
+
+            // Re-run observer
+            setTimeout(() => {
+              window.app.observeElements();
+            }, 50);
+
+          }, 400);
+
+          state.currentPage = pageId;
+
+          if(state.isMenuOpen) {
+            window.app.toggleMobileMenu();
+          }
+        },
+
+        toggleMobileMenu: () => {
+          state.isMenuOpen = !state.isMenuOpen;
+          const menu = document.getElementById('mobile-menu');
+          const btn = document.getElementById('mobile-menu-btn');
+          
+          if (state.isMenuOpen) {
+            menu.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+          } else {
+            menu.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        },
+
+        toggleChat: () => {
+          state.isChatOpen = !state.isChatOpen;
+          const btn = document.getElementById('chat-toggle-btn');
+          const windowEl = document.getElementById('chat-window');
+          
+          if(state.isChatOpen) {
+            btn.classList.add('scale-0', 'opacity-0');
+            windowEl.classList.remove('hidden');
+            windowEl.classList.add('animate-slide-in-right');
+            window.app.renderMessages();
+            // Focus input
+            setTimeout(() => document.getElementById('chat-input').focus(), 100);
+          } else {
+            btn.classList.remove('scale-0', 'opacity-0');
+            windowEl.classList.add('hidden');
+            windowEl.classList.remove('animate-slide-in-right');
+            // Return focus to toggle button
+            btn.focus();
+          }
+        },
+
+        handleContactSubmit: () => {
+          const btn = document.querySelector('#contact-form button');
+          const originalContent = btn.innerHTML;
+          
+          // Loading state
+          btn.disabled = true;
+          btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>';
+          
+          // Simulate network request
+          setTimeout(() => {
+            // Show toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-x-full');
+            
+            // Reset form
+            document.getElementById('contact-form').reset();
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+            
+            // Hide toast after delay
+            setTimeout(() => {
+              toast.classList.add('translate-x-full');
+            }, 4000);
+          }, 1500);
+        },
+
+        observeElements: () => {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target); 
+              }
+            });
+          }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+          document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        },
+
+        renderMessages: () => {
+          const container = document.getElementById('chat-messages');
+          container.innerHTML = '';
+          
+          state.messages.forEach(msg => {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in-up`;
+            
+            // Format markdown-like syntax simply
+            let formattedText = msg.text
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+              .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>'); // List items
+            
+            if(formattedText.includes('<li>')) {
+              formattedText = '<ul>' + formattedText + '</ul>';
+            }
+
+            const bubble = document.createElement('div');
+            bubble.className = `max-w-[85%] rounded-2xl px-5 py-3 text-sm shadow-sm chat-content ${
+              msg.role === 'user'
+                ? 'bg-primary-700 text-white rounded-br-none'
+                : 'bg-white text-stone-700 border border-primary-100 rounded-bl-none'
+            }`;
+            bubble.innerHTML = formattedText;
+            
+            wrapper.appendChild(bubble);
+            container.appendChild(wrapper);
+          });
+
+          if(state.isChatLoading) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-start';
+            const bubble = document.createElement('div');
+            bubble.className = 'bg-white border border-primary-100 rounded-2xl rounded-bl-none px-4 py-4 shadow-sm flex items-center gap-1';
+            bubble.innerHTML = `
+              <div class="w-2 h-2 bg-primary-400 rounded-full typing-dot"></div>
+              <div class="w-2 h-2 bg-primary-400 rounded-full typing-dot"></div>
+              <div class="w-2 h-2 bg-primary-400 rounded-full typing-dot"></div>
+            `;
+            wrapper.appendChild(bubble);
+            container.appendChild(wrapper);
+          }
+
+          container.scrollTop = container.scrollHeight;
+        },
+
+        sendMessage: async () => {
+          const inputEl = document.getElementById('chat-input');
+          const text = inputEl.value.trim();
+          if (!text || state.isChatLoading) return;
+
+          // Add user message
+          state.messages.push({ role: 'user', text });
+          inputEl.value = '';
+          state.isChatLoading = true;
+          window.app.renderMessages();
+
+          // Simulate response delay with realistic typing time
+          const delay = Math.max(1000, Math.min(3000, text.length * 30));
+          
+          setTimeout(() => {
+            const responseText = window.app.getSimulatedResponse(text);
+            state.messages.push({ role: 'model', text: responseText });
+            state.isChatLoading = false;
+            window.app.renderMessages();
+          }, delay);
+        },
+
+        getSimulatedResponse: (input) => {
+          const lowerInput = input.toLowerCase();
+          
+          if (lowerInput.includes('biblioteka') || lowerInput.includes('libra') || lowerInput.includes('lexim')) {
+            return "Biblioteka jonë është e hapur nga e Hëna në të Premte, ora 09:00 - 14:00. Mund të aksesoni sistemin online duke klikuar butonin **'Biblioteka'** në menu.";
+          }
+          else if (lowerInput.includes('orari') || lowerInput.includes('hapur') || lowerInput.includes('mbyllur') || lowerInput.includes('kur fillon')) {
+            return "Mësimi zhvillohet nga ora **08:00 deri në 13:00**. Zyra administrative është e hapur deri në orën 16:00. Shkolla është e mbyllur në fundjavë.";
+          }
+          else if (lowerInput.includes('kontakt') || lowerInput.includes('telefon') || lowerInput.includes('email') || lowerInput.includes('flas')) {
+            return "Mund të na kontaktoni në numrin **+355 4 222 3333** ose me email në **info@shkollaLasgush Poradeci.edu.al**.";
+          }
+          else if (lowerInput.includes('adres') || lowerInput.includes('ku ndodhet') || lowerInput.includes('lokacion')) {
+            return "Ndodhemi në **Rruga Llambi Bonata, Kombinat**, Tiranë. Pranë qendrës së qytetit, lehtësisht e aksesueshme me transport urban.";
+          }
+          else if (lowerInput.includes('regjistrim') || lowerInput.includes('nxenes') || lowerInput.includes('transfer')) {
+            return "Për regjistrime të reja, ju lutem paraqituni në sekretari (08:00-14:00) me certifikatën e lindjes së fëmijës dhe vërtetim banimi.";
+          }
+          else {
+            return "Më falni, nuk e kuptova plotësisht. Mund të pyesni për **orarin**, **bibliotekën**, **kontaktin**, **adresën** ose **regjistrimet**.";
+          }
+        }
+      };
+
+      // Initialization
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('year').textContent = new Date().getFullYear();
+        if (window.lucide) window.lucide.createIcons();
+        
+        // Initialize Chat
+        window.app.initChat();
+
+        // Initialize Accessibility
+        window.app.initAccessibility();
+
+        // Initial Observer Setup
+        window.app.observeElements();
+        
+        // Initial Navigation Setup
+        // Check hash if simple routing is needed, otherwise default to home
+        window.app.navigateTo('home');
+      });
+
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

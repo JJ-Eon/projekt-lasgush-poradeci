@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://docs.google.com https://drive.google.com;">
+  
+  <title>Paneli i Studentit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* Base styling */
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #F5F1E3;
+      color: #3E2723;
+      margin: 0;
+      padding: 10px;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+      opacity: 0;
+      animation: containerFadeIn 0.8s ease-out forwards;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 10px; box-sizing: border-box; }
+    
+    header { margin-bottom: 20px; animation: fadeIn 1s ease-out; padding-top: 50px; }
+    header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 5px; }
+    header p { color: #5D4037; font-size: 1rem; }
+    body.dark-mode header p, body.dark-mode header span { color: #e0e0e0 !important; }
+    
+    .toggle-btn, .dark-mode-toggle {
+      position: fixed; top: 15px; padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer;
+      z-index: 999; background: #6D4C41; color: white; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .toggle-btn { left: 15px; }
+    .dark-mode-toggle { right: 15px; }
+    .toggle-btn:active, .dark-mode-toggle:active { transform: scale(0.95); }
+
+    .sidebar {
+      position: fixed; top: 0; left: -100%; width: 260px; height: 100%;
+      background-color: #3E2723; color: white; padding-top: 70px;
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 998; box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar button {
+      display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none;
+      padding: 15px 20px; font-size: 1.1rem; color: rgba(255,255,255,0.9); cursor: pointer; text-align: left;
+      text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar button:active { background-color: rgba(255,255,255,0.1); }
+    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 997; backdrop-filter: blur(2px); }
+    .sidebar-overlay.active { display: block; }
+
+    .search-container { margin: 10px auto; max-width: 600px; width: 100%; }
+    input[type="text"] {
+      padding: 12px 20px; width: 100%; font-size: 16px; border-radius: 30px; border: 1px solid #ccc; 
+      box-sizing: border-box; -webkit-appearance: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .filter-container {
+      margin: 15px 0 25px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+      background: rgba(255,255,255,0.5); padding: 15px; border-radius: 12px;
+    }
+    body.dark-mode .filter-container { background: rgba(255,255,255,0.05); }
+    .filter-group { display: flex; align-items: center; gap: 5px; background: #fff; border-radius: 8px; padding: 0 8px; border: 1px solid #ddd; }
+    body.dark-mode .filter-group { background: #2c2c2c; border-color: #444; }
+    select { padding: 10px 5px; font-size: 0.9rem; border: none; background: transparent; color: inherit; outline: none; }
+
+    .book-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding-bottom: 40px; }
+    .book {
+      background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s; text-align: left; display: flex; flex-direction: column; position: relative;
+    }
+    body.dark-mode .book { background: #1E1E1E; color: #e0e0e0; }
+    .book h3 { margin: 0 0 8px 0; color: #3E2723; font-size: 1.2rem; }
+    body.dark-mode .book h3 { color: #fff; }
+    .desc { 
+        font-size: 0.95rem; 
+        color: #666; 
+        margin-top: 10px; 
+        flex-grow: 1; 
+        line-height: 1.5; 
+        max-height: 150px; 
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    /* Scrollbar for description */
+    .desc::-webkit-scrollbar { width: 4px; }
+    .desc::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 2px; }
+    
+    body.dark-mode .book .desc { color: #aaa; }
+    
+    .round-button {
+      margin-top: 15px; border-radius: 25px; padding: 12px 0; border: none; cursor: pointer;
+      background: #6D4C41; color: white; font-weight: 600; width: 100%; font-size: 1rem;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .round-button:active { transform: scale(0.98); }
+    .round-button:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-waitlist { background: #f57f17; }
+    
+    .fav-btn {
+      position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.4rem;
+      cursor: pointer; color: #ddd; padding: 5px;
+    }
+    .fav-btn.active { color: #e91e63; }
+    
+    .rating-container { display: flex; align-items: center; margin-top: 8px; gap: 4px; }
+    .star { cursor: pointer; color: #ccc; font-size: 1.2rem; padding: 2px; }
+    .star.active { color: #FFD700; }
+
+    .audio-player {
+        margin-top: 15px;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    audio { width: 100%; height: 35px; }
+
+    .announcement-bar {
+      background: #fff3e0; border-left: 5px solid #ef6c00; padding: 15px; margin-bottom: 20px; 
+      text-align: left; border-radius: 4px; display: none; animation: slideDown 0.5s; font-size: 0.95rem;
+    }
+    body.dark-mode .announcement-bar { background: #332200; border-left-color: #ff9800; color: #fff; }
+
+    .pagination { margin: 20px 0; display: flex; justify-content: center; gap: 8px; }
+    .page-btn { padding: 8px 14px; border: 1px solid #6D4C41; background: none; cursor: pointer; border-radius: 6px; font-size: 1rem; }
+    .page-btn.active { background: #6D4C41; color: white; }
+
+    .borrow-request {
+      background: #fff; padding: 15px; margin-bottom: 12px; border-radius: 10px;
+      display: flex; justify-content: space-between; align-items: center; text-align: left;
+    }
+    body.dark-mode .borrow-request { background: #1E1E1E; color: #e0e0e0; }
+    .status-badge { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; margin-left: 10px; }
+    .status-pending { background: #fff3e0; color: #ef6c00; }
+    .status-approved { background: #e8f5e9; color: #2e7d32; }
+    .status-rejected { background: #ffebee; color: #c62828; }
+    .status-returned { background: #e3f2fd; color: #1565c0; }
+    .overdue-text { color: #c62828; font-weight: bold; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes containerFadeIn { to { opacity: 1; } }
+
+    /* Mobile Tweaks */
+    @media (max-width: 600px) {
+      .filter-container { flex-direction: column; padding: 10px; }
+      .filter-group { width: 100%; box-sizing: border-box; }
+      select { width: 100%; }
+      .book-list { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.8rem; }
+      .container { padding: 0 15px; }
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+      "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+      "firebase/database": "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+  
+  <div class="container">
+    <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+    
+    <div class="sidebar" id="sidebar">
+      <button onclick="window.location.href='profile.html'"><i class="fas fa-user-cog"></i> Profili Im</button>
+      <button onclick="showSection('books')"><i class="fas fa-book"></i> Katalogu</button>
+      <button onclick="showSection('favorites')"><i class="fas fa-heart"></i> Të Preferuarat</button>
+      <button onclick="showSection('requests')"><i class="fas fa-clipboard-list"></i> Kërkesat</button>
+      <div style="flex-grow:1"></div>
+      <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Dil</button>
+    </div>
+
+    <header>
+      <h1>Mirë se Vini, <span id="user-display-name">Nxënës</span></h1>
+      <p class="datetime" id="datetime"></p>
+      <div id="loading-indicator" style="display:none; color: #6D4C41;"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>
+    </header>
+
+    <div id="announcement-area" class="announcement-bar"></div>
+
+    <!-- Books View -->
+    <div id="books-view">
+      <div class="search-container"><input type="text" id="search-input" placeholder="Kërko titullin, autorin..." oninput="resetPageAndFilter()"></div>
+      <div class="filter-container">
+        <div class="filter-group">
+          <i class="fas fa-sort" style="color:#888"></i>
+          <select id="sort-option" onchange="resetPageAndFilter()">
+            <option value="title-asc">Titulli (A-Z)</option>
+            <option value="title-desc">Titulli (Z-A)</option>
+            <option value="author-asc">Autori (A-Z)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <i class="fas fa-graduation-cap" style="color:#888"></i>
+          <select id="grade-filter" onchange="resetPageAndFilter()">
+            <option value="all">Të gjitha klasat</option>
+            <option value="1">Klasa 1</option>
+            <option value="2">Klasa 2</option>
+            <option value="3">Klasa 3</option>
+            <option value="4">Klasa 4</option>
+            <option value="5">Klasa 5</option>
+            <option value="6">Klasa 6</option>
+            <option value="7">Klasa 7</option>
+            <option value="8">Klasa 8</option>
+            <option value="9">Klasa 9</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <i class="fas fa-book" style="color:#888"></i>
+          <select id="genre-filter" onchange="resetPageAndFilter()">
+            <option value="all">Të gjitha zhanret</option>
+            <option value="Roman">Roman</option>
+            <option value="Poezi">Poezi</option>
+            <option value="Histori">Histori</option>
+            <option value="Shkencë">Shkencë</option>
+            <option value="Tjetër">Tjetër</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <i class="fas fa-check-circle" style="color:#888"></i>
+          <select id="availability-filter" onchange="resetPageAndFilter()">
+            <option value="all">Të gjitha statuset</option>
+            <option value="available">Të disponueshëm</option>
+            <option value="unavailable">Të zënë</option>
+          </select>
+        </div>
+      </div>
+      <div class="book-list" id="book-list"></div>
+      <div class="pagination" id="pagination"></div>
+      <p id="no-books-msg" style="display:none; padding:20px;">Nuk u gjet asnjë libër.</p>
+    </div>
+
+    <!-- Favorites View -->
+    <div id="favorites-view" style="display:none">
+      <h2><i class="fas fa-heart" style="color:#e91e63"></i> Librat e Preferuar</h2>
+      <div class="book-list" id="fav-list"></div>
+      <p id="no-fav-msg" style="display:none; padding:20px;">Nuk keni libra të preferuar.</p>
+    </div>
+
+    <!-- Requests View -->
+    <div class="borrow-requests" id="requests-view">
+      <h2><i class="fas fa-history"></i> Historiku</h2>
+      <div id="request-list"></div>
+      <p id="no-requests-msg" style="display:none; padding:20px;">Nuk keni asnjë kërkesë aktive.</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "firebase/app";
+    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+    import { getDatabase, ref, get, push, set, remove, onValue, serverTimestamp } from "firebase/database";
+    
+    // Dark Mode
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.querySelector('.dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO5IVsYnIo9-HB3x-aFYWo00nQHeTJl-A",
+      authDomain: "library-system-18d69.firebaseapp.com",
+      databaseURL: "https://library-system-18d69-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "library-system-18d69",
+      storageBucket: "library-system-18d69.appspot.com",
+      messagingSenderId: "888263371866",
+      appId: "1:888263371866:web:67e59dc03131d3bcfa7c63"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    let currentUser = null;
+    let currentUserName = "Nxënës";
+    let allBooks = [];
+    let userFavorites = new Set();
+    
+    const ITEMS_PER_PAGE = 8;
+    let currentPage = 1;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        get(ref(db, `users/${user.uid}`)).then(snap => {
+           if(snap.exists()) {
+             currentUserName = snap.val().username || "Nxënës";
+             document.getElementById('user-display-name').textContent = currentUserName;
+           }
+        });
+        loadBooks();
+        loadFavorites();
+        listenToRequests();
+        listenToAnnouncements();
+      } else { window.location.href = 'login.html'; }
+    });
+
+    window.logout = () => signOut(auth).then(() => window.location.href = 'login.html');
+
+    function loadFavorites() {
+      onValue(ref(db, `users/${currentUser.uid}/favorites`), (snap) => {
+        userFavorites.clear();
+        if(snap.exists()) {
+          const data = snap.val();
+          Object.keys(data).forEach(k => userFavorites.add(k));
+        }
+        if(document.getElementById('favorites-view').style.display === 'block') renderFavorites();
+        else filterBooks(); 
+      });
+    }
+
+    window.toggleFav = async (bookId) => {
+      if(userFavorites.has(bookId)) {
+        await remove(ref(db, `users/${currentUser.uid}/favorites/${bookId}`));
+      } else {
+        await set(ref(db, `users/${currentUser.uid}/favorites/${bookId}`), true);
+      }
+    };
+
+    async function loadBooks() {
+      document.getElementById('loading-indicator').style.display = 'block';
+      onValue(ref(db, 'books'), (snap) => {
+        if (snap.exists()) {
+          const data = snap.val();
+          allBooks = Object.entries(data).map(([key, val]) => ({ ...val, id: key }));
+          filterBooks();
+        }
+        document.getElementById('loading-indicator').style.display = 'none';
+      });
+    }
+
+    window.resetPageAndFilter = () => { currentPage = 1; filterBooks(); };
+
+    window.filterBooks = () => {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-option').value;
+      const grade = document.getElementById('grade-filter').value;
+      const genre = document.getElementById('genre-filter').value;
+      const availability = document.getElementById('availability-filter').value;
+
+      let filtered = allBooks.filter(book => {
+        const matchSearch = (book.title || "").toLowerCase().includes(search) || (book.author || "").toLowerCase().includes(search);
+        
+        // Strict grade matching
+        const matchGrade = grade === "all" || String(book.recommended) === String(grade);
+        
+        const matchGenre = genre === "all" || book.genre === genre;
+        
+        const qty = parseInt(book.quantity) || 0;
+        let matchAvailability = true;
+        if (availability === "available") matchAvailability = qty > 0;
+        if (availability === "unavailable") matchAvailability = qty < 1;
+
+        return matchSearch && matchGrade && matchGenre && matchAvailability;
+      });
+
+      if (sort === 'title-asc') filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+      else if (sort === 'title-desc') filtered.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
+      else if (sort === 'author-asc') filtered.sort((a, b) => (a.author || "").localeCompare(b.author || ""));
+
+      const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const pagedData = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+      renderBookGrid(pagedData, 'book-list', false);
+      renderPagination(totalPages);
+      
+      document.getElementById('no-books-msg').style.display = filtered.length === 0 ? 'block' : 'none';
+    };
+
+    function convertDriveLink(link) {
+        if (!link) return null;
+        // Extract ID from common Drive link formats
+        const patterns = [
+            /\/file\/d\/([a-zA-Z0-9_-]+)/,
+            /id=([a-zA-Z0-9_-]+)/,
+            /\/open\?id=([a-zA-Z0-9_-]+)/
+        ];
+        
+        for (let pattern of patterns) {
+            const match = link.match(pattern);
+            if (match && match[1]) {
+                return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+            }
+        }
+        return link; // Fallback if no ID found (maybe direct link)
+    }
+
+    function renderBookGrid(books, containerId, isFavView) {
+      const list = document.getElementById(containerId);
+      list.innerHTML = '';
+      books.forEach(book => {
+        const isFav = userFavorites.has(book.id);
+        
+        let avgRating = 0;
+        let myRating = 0;
+        if(book.ratings) {
+          const vals = Object.values(book.ratings);
+          avgRating = vals.reduce((a,b)=>a+b,0) / vals.length;
+          if(book.ratings[currentUser.uid]) myRating = book.ratings[currentUser.uid];
+        }
+
+        const isAvailable = book.quantity > 0;
+        let isOnWaitlist = false;
+        if(book.waitlist && book.waitlist[currentUser.uid]) isOnWaitlist = true;
+
+        let btnHtml = '';
+        if(isAvailable) {
+            btnHtml = `<button class="round-button" onclick="requestBook('${escapeHtml(book.title)}', '${book.id}')">Tërhiq</button>`;
+        } else {
+            if(isOnWaitlist) {
+                btnHtml = `<button class="round-button btn-waitlist" disabled>Në Pritje...</button>`;
+            } else {
+                btnHtml = `<button class="round-button btn-waitlist" onclick="joinWaitlist('${book.id}', '${escapeHtml(book.title)}')"><i class="fas fa-clock"></i> Rezervo Radhën</button>`;
+            }
+        }
+
+        let audioHtml = '';
+        if (book.audioUrl) {
+            const streamLink = convertDriveLink(book.audioUrl);
+            audioHtml = `
+            <div class="audio-player">
+                <audio controls src="${streamLink}" preload="none">
+                    Browser-i juaj nuk suporton audio.
+                </audio>
+            </div>`;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'book';
+        div.innerHTML = `
+          <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${book.id}')"><i class="fas fa-heart"></i></button>
+          <h3>${escapeHtml(book.title)}</h3>
+          <p><i class="fas fa-user-pen"></i> ${escapeHtml(book.author)}</p>
+          <div class="rating-container" id="rating-${book.id}">
+             ${renderStars(avgRating, myRating, book.id)}
+             <small style="margin-left:5px">(${avgRating.toFixed(1)})</small>
+          </div>
+          <p><i class="fas fa-layer-group"></i> ${escapeHtml(book.genre)} | <i class="fas fa-hashtag"></i> ${book.quantity || 0}</p>
+          <div class="desc" title="${escapeHtml(book.description)}">${escapeHtml(book.description || 'Pa përshkrim')}</div>
+          ${audioHtml}
+          ${btnHtml}
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function renderStars(avg, myRating, bookId) {
+      let html = '';
+      for(let i=1; i<=5; i++) {
+        const cls = i <= Math.round(avg) ? 'active' : '';
+        html += `<i class="fas fa-star star ${cls}" onclick="rateBook('${bookId}', ${i})"></i>`;
+      }
+      return html;
+    }
+
+    window.rateBook = async (bookId, rating) => {
+      await set(ref(db, `books/${bookId}/ratings/${currentUser.uid}`), rating);
+    };
+
+    function renderPagination(total) {
+      const container = document.getElementById('pagination');
+      container.innerHTML = '';
+      if(total <= 1) return;
+      
+      for(let i=1; i<=total; i++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.innerText = i;
+        btn.onclick = () => { currentPage = i; filterBooks(); };
+        container.appendChild(btn);
+      }
+    }
+
+    function renderFavorites() {
+      const favs = allBooks.filter(b => userFavorites.has(b.id));
+      renderBookGrid(favs, 'fav-list', true);
+      document.getElementById('no-fav-msg').style.display = favs.length === 0 ? 'block' : 'none';
+    }
+
+    window.requestBook = async (title, bookId) => {
+      const lastReq = localStorage.getItem('lastRequest');
+      if(lastReq && Date.now() - parseInt(lastReq) < 60000) {
+        alert('Prisni 1 minutë.');
+        return;
+      }
+      
+      if(!confirm(`Konfirmo kërkesën për "${title}"?`)) return;
+
+      const requestData = {
+        bookId, bookTitle: title, userId: currentUser.uid, username: currentUserName,
+        status: 'pending', timestamp: serverTimestamp()
+      };
+
+      try {
+        await push(ref(db, 'borrow_requests'), requestData);
+        localStorage.setItem('lastRequest', Date.now().toString());
+        alert('Kërkesa u dërgua!');
+        showSection('requests');
+      } catch(e) { console.error(e); alert('Gabim.'); }
+    };
+    
+    window.joinWaitlist = async (bookId, title) => {
+        if(!confirm(`Konfirmo listën e pritjes për "${title}"?`)) return;
+        try {
+            await set(ref(db, `books/${bookId}/waitlist/${currentUser.uid}`), true);
+            alert('U shtuat në listë!');
+        } catch(e) { alert('Gabim'); }
+    };
+
+    function listenToRequests() {
+      onValue(ref(db, 'borrow_requests'), (snap) => {
+        const list = document.getElementById('request-list');
+        list.innerHTML = '';
+        if(snap.exists()) {
+          const myReqs = [];
+          snap.forEach(c => { if(c.val().userId === currentUser.uid) myReqs.push(c.val()); });
+          myReqs.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+          
+          if(myReqs.length > 0) {
+            document.getElementById('no-requests-msg').style.display = 'none';
+            const now = Date.now();
+
+            myReqs.forEach(req => {
+              let badge = 'status-pending'; let txt = 'Në pritje';
+              if(req.status === 'approved') { badge = 'status-approved'; txt = 'E Miratuar'; }
+              if(req.status === 'rejected') { badge = 'status-rejected'; txt = 'Refuzuar'; }
+              if(req.status === 'returned') { badge = 'status-returned'; txt = 'E Kthyer'; }
+              
+              let dueHtml = '';
+              if(req.dueDate && req.status === 'approved') {
+                 const isOverdue = req.dueDate < now;
+                 const overdueClass = isOverdue ? 'overdue-text' : '';
+                 dueHtml = `<br><span class="${overdueClass}">Afati: ${new Date(req.dueDate).toLocaleDateString('sq-AL')}</span>`;
+              }
+
+              const div = document.createElement('div');
+              div.className = 'borrow-request';
+              div.innerHTML = `<div><strong>${escapeHtml(req.bookTitle)}</strong><br><small>${new Date(req.timestamp).toLocaleDateString('sq-AL')}</small>${dueHtml}</div>
+              <span class="status-badge ${badge}">${txt}</span>`;
+              list.appendChild(div);
+            });
+          } else document.getElementById('no-requests-msg').style.display = 'block';
+        } else document.getElementById('no-requests-msg').style.display = 'block';
+      });
+    }
+
+    function listenToAnnouncements() {
+      onValue(ref(db, 'announcements'), (snap) => {
+        const area = document.getElementById('announcement-area');
+        if(snap.exists()) {
+          const anns = [];
+          snap.forEach(c => anns.push(c.val()));
+          const latest = anns.sort((a,b) => b.date - a.date)[0];
+          area.innerHTML = `<strong><i class="fas fa-bullhorn"></i> NJOFTIM: ${escapeHtml(latest.title)}</strong><p style="margin:5px 0 0;">${escapeHtml(latest.body)}</p>`;
+          area.style.display = 'block';
+        } else {
+          area.style.display = 'none';
+        }
+      });
+    }
+
+    window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('open'); document.querySelector('.sidebar-overlay').classList.toggle('active'); };
+    window.showSection = (section) => {
+      ['books', 'requests', 'favorites'].forEach(s => document.getElementById(`${s}-view`).style.display = 'none');
+      document.getElementById(`${section}-view`).style.display = 'block';
+      if(section === 'favorites') renderFavorites();
+      document.getElementById('sidebar').classList.remove('open');
+      document.querySelector('.sidebar-overlay').classList.remove('active');
+    };
+    window.toggleDarkMode = () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+      const icon = document.querySelector('.dark-mode-toggle i');
+      icon.classList.replace(document.body.classList.contains('dark-mode') ? 'fa-moon' : 'fa-sun', document.body.classList.contains('dark-mode') ? 'fa-sun' : 'fa-moon');
+    };
+    function escapeHtml(text) { return text ? text.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; }
+  </script>
+</body>
+</html>

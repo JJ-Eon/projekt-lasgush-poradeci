@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📚 Mirë se vini në Bibliotekë</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+      background-color: #F5F1E3; /* Parchment-like */
+      color: #3E2723;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #3E2723;
+    }
+    p {
+      font-size: 18px;
+      color: #5D4037;
+      margin-bottom: 30px;
+    }
+    .form-container {
+      padding: 20px;
+      display: none;
+    }
+    .form-container.active {
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Nunito', sans-serif;
+      background-color: #F8F8F8;
+      color: #3E2723;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      border-color: #6D4C41;
+      outline: none;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 18px;
+      color: #F5F1E3;
+      background-color: #6D4C41;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .btn:hover {
+      background-color: #5D4037;
+      transform: scale(1.03);
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: #6D4C41;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;
+      margin-top: 20px;
+      text-align: left;
+      transition: color 0.3s;
+    }
+    .toggle-btn:hover {
+      color: #5D4037;
+    }
+    /* Choice Screen Styles */
+    .choice-screen {
+      padding: 40px;
+    }
+    .choice-screen h2 {
+      margin-bottom: 30px;
+    }
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        max-width: 90%;
+      }
+      .form-container, .choice-screen {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      p {
+        font-size: 16px;
+      }
+      .btn {
+        font-size: 16px;
+        padding: 12px 24px;
+      }
+      input, select {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="choice-screen" class="form-container active">
+      <h2>Mirë se vini!</h2>
+      <p>Zgjidhni një metodë për të vazhduar më tej.</p>
+      <button class="btn" id="btn-login">
+        <i class="fas fa-sign-in-alt"></i> Hyr
+      </button>
+      <button class="btn" id="btn-register">
+        <i class="fas fa-user-plus"></i> Regjistrohu
+      </button>
+    </div>
+    <div id="login-form" class="form-container">
+      <h2>Hyr në Llogari</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Fjalëkalimi" required>
+        <button type="submit" class="btn">
+          <i class="fas fa-lock"></i> Hyr
+        </button>
+      </form>
+      <button class="toggle-btn" id="back-from-login">
+        <i class="fas fa-arrow-left"></i> Kthehu
+      </button>
+      <!-- Forgot Password Button -->
+      <button class="toggle-btn" id="forgot-password">
+        <i class="fas fa-unlock-alt"></i> Harrova Fjalëkalimin
+      </button>
+    </div>
+    <div id="register-form" class="form-container">
+      <h2>Regjistrohu</h2>
+      <form id="registerForm">
+        <select id="userType">
+          <option value="student">Nxënës</option>
+          <option value="teacher">Mësues</option>
+        </select>
+        <input type="text" id="username" placeholder="Emri i Përdoruesit" required>
+        <input type="password" id="password" placeholder="Fjalëkalimi" required>
+        <input type="text" id="class" placeholder="Klasa (për nxënësit)" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <button type="submit" class="btn">
+          <i class="fas fa-check-circle"></i> Regjistrohu
+        </button>
+      </form>
+      <button class="toggle-btn" id="back-from-register">
+        <i class="fas fa-arrow-left"></i> Kthehu
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import necessary Firebase functions.
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO5IVsYnIo9-HB3x-aFYWo00nQHeTJl-A",
+      authDomain: "library-system-18d69.firebaseapp.com",
+      databaseURL: "https://library-system-18d69-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "library-system-18d69",
+      storageBucket: "library-system-18d69.appspot.com",
+      messagingSenderId: "888263371866",
+      appId: "1:888263371866:web:67e59dc03131d3bcfa7c63"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // Screen Elements
+    const screens = {
+      choice: document.getElementById('choice-screen'),
+      login: document.getElementById('login-form'),
+      register: document.getElementById('register-form')
+    };
+
+    // Screen Toggle
+    document.getElementById('btn-login').addEventListener('click', () => toggleScreen('login'));
+    document.getElementById('btn-register').addEventListener('click', () => toggleScreen('register'));
+    document.getElementById('back-from-login').addEventListener('click', () => toggleScreen('choice'));
+    document.getElementById('back-from-register').addEventListener('click', () => toggleScreen('choice'));
+
+    function toggleScreen(screen) {
+      Object.values(screens).forEach(s => s.classList.remove('active'));
+      screens[screen].classList.add('active');
+    }
+
+    // Hide class field if Mësues is selected.
+    const userTypeSelect = document.getElementById("userType");
+    const classInput = document.getElementById("class");
+    userTypeSelect.addEventListener("change", function(){
+      if(this.value === "teacher") {
+        classInput.style.display = "none";
+        classInput.required = false;
+      } else {
+        classInput.style.display = "block";
+        classInput.required = true;
+      }
+    });
+
+    // Register Function
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const userType = document.getElementById('userType').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const classInfo = userType === "student" ? document.getElementById('class').value.trim() : "";
+      const email = document.getElementById('email').value.trim();
+
+      if(!username || !password || !email || (userType === "student" && !classInfo)) {
+        alert('Ju lutem plotësoni të gjitha fushat.');
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await set(ref(database, 'users/' + user.uid), {
+          userType: userType,
+          username: username,
+          class: classInfo,
+          email: email
+        });
+
+        await sendEmailVerification(auth.currentUser);
+        alert('Regjistrimi u realizua me sukses! Ju lutem kontrolloni emailin tuaj për verifikimin.');
+        document.getElementById('registerForm').reset();
+        toggleScreen('choice');
+      } catch (error) {
+        console.error('Dështimi i regjistrimit:', error);
+        alert('Dështimi i regjistrimit: ' + error.message);
+      }
+    });
+
+    // Login Function
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      if(!email || !password) {
+        alert('Ju lutem plotësoni të dhënat e emailit dhe fjalëkalimit.');
+        return;
+      }
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        if(!user.emailVerified) {
+          alert('Ju lutem verifikoni emailin tuaj para se të hyni.');
+          signOut(auth);
+          return;
+        }
+        const userRef = ref(database, 'users/' + user.uid);
+        get(userRef).then((snapshot) => {
+          if(snapshot.exists()){
+            const userData = snapshot.val();
+            if(userData.userType === 'teacher'){
+              window.location.href = 'tdash.html';
+            } else {
+              window.location.href = 'sdashboard.html';
+            }
+            alert('Kyçja ishte e suksesshme!');
+          } else {
+            alert('Të dhënat e përdoruesit nuk u gjetën.');
+            signOut(auth);
+          }
+        }).catch((error) => {
+          console.error(error);
+          alert('Gabim gjatë marrjes së të dhënave të përdoruesit.');
+          signOut(auth);
+        });
+      } catch (error) {
+        console.error('Dështimi i hyrjes:', error);
+        alert('Dështimi i hyrjes: ' + error.message);
+      }
+    });
+
+    // Forgot Password Functionality.
+    document.getElementById('forgot-password').addEventListener('click', async function(){
+      const email = document.getElementById('loginEmail').value.trim();
+      if(!email) {
+        alert('Ju lutem shkruani emailin tuaj për të marrë udhëzimet e përditësimit të fjalëkalimit.');
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('U dërgua udhëzimet për përditësimin e fjalëkalimit në emailin tuaj.');
+      } catch (error) {
+        console.error('Gabim gjatë dërgimit të rist password:', error);
+        alert('Gabim: ' + error.message);
+      }
+    });
+
+  </script>
+</body>
+</html>

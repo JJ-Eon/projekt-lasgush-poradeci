@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="sq">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paneli i Mësuesit - Menaxhimi i Bibliotekës</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background-light: #F5F1E3;
+      --text-light: #3E2723;
+      --background-dark: #121212;
+      --text-dark: #E0E0E0;
+      --primary-color: #6D4C41;
+      --secondary-color: #f1f1f1;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--background-light);
+      color: var(--text-light);
+      padding: 20px;
+      margin: 0;
+      transition: all 0.3s ease-in-out;
+    }
+
+    header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 18px;
+      color: var(--primary-color);
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background-color: var(--background-dark);
+      color: var(--text-dark);
+    }
+
+    body.dark-mode header p {
+      color: var(--secondary-color);
+    }
+
+    /* Tab Styles */
+    .tab {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab button {
+      background-color: var(--secondary-color);
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 17px;
+      color: var(--text-light);
+      border-radius: 999em;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tab button.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* Form Styles */
+    .form-container input,
+    .form-container textarea,
+    .form-container button {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-container textarea {
+      height: 100px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    button.delete {
+      background-color: red;
+    }
+
+    /* Dark Mode Toggle Button */
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      table th,
+      table td {
+        font-size: 14px;
+      }
+
+      .form-container input,
+      .form-container textarea,
+      .form-container button {
+        font-size: 14px;
+      }
+
+      .tab button {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .dark-mode-toggle {
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tab {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Search bar in Book Catalog Tab */
+    #teacher-book-search {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    #teacher-book-search:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    /* Styling for inline edit fields */
+    .edit-input {
+      width: 90%;
+      padding: 5px;
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .edit-textarea {
+      width: 90%;
+      padding: 5px;
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+    }
+
+    /* Styling for edit buttons */
+    .edit-button {
+      padding: 6px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .edit-button.cancel {
+      background-color: #ccc;
+      color: var(--text-light);
+    }
+
+    .edit-button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Dark Mode Toggle -->
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">Ndrysho Sfondin</button>
+
+  <header>
+    <h1>Paneli i Mësuesit - Menaxhimi i Bibliotekës</h1>
+    <p>Mirë se vini në panelin e menaxhimit të bibliotekës.</p>
+  </header>
+
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'AddBook')">Shto Libra</button>
+    <button class="tablinks" onclick="openTab(event, 'BorrowRequests')">Kërkesat për Tërheqje</button>
+    <button class="tablinks" onclick="openTab(event, 'BookCatalog')">Katalogu i Librave</button>
+    <button class="tablinks" onclick="openTab(event, 'Students')">Nxënësit</button>
+  </div>
+
+  <!-- Add Book Tab -->
+  <div id="AddBook" class="tabcontent">
+    <div class="form-container">
+      <h2>Shto/Modifiko Libër</h2>
+      <input type="text" id="add-book-title" placeholder="Titulli i Librit" required>
+      <input type="text" id="add-book-author" placeholder="Autori" required>
+      <input type="text" id="add-book-genre" placeholder="Zhanri">
+      <textarea id="add-book-description" placeholder="Përshkrimi"></textarea>
+      <input type="text" id="add-book-recommended" placeholder="Rekomanduar për">
+      <input type="number" id="add-book-quantity" placeholder="Sasia (Numri i Kopjeve)" required>
+      <button onclick="addBook()">Shto Libër</button>
+    </div>
+  </div>
+
+  <!-- Borrow Requests Tab -->
+  <div id="BorrowRequests" class="tabcontent">
+    <h2>Kërkesat për Tërheqje</h2>
+    <table id="borrow-requests-table">
+      <thead>
+        <tr>
+          <th>Libri</th>
+          <th>Emri i Nxënësit</th>
+          <th>Klasa</th>
+          <th>Data &amp; Ora</th>
+          <th>Statusi</th>
+          <th>Veprime</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Book Catalog Tab -->
+  <div id="BookCatalog" class="tabcontent">
+    <h2>Katalogu i Librave</h2>
+    <!-- Teacher Search Bar -->
+    <input type="text" id="teacher-book-search" placeholder="Kërko libër..." oninput="searchBooksTeacher()">
+    <table id="book-table">
+      <thead>
+        <tr>
+          <th>Titulli</th>
+          <th>Autori</th>
+          <th>Zhanri</th>
+          <th>Përshkrimi</th>
+          <th>Rekomanduar për</th>
+          <th>Sasia</th>
+          <th>Veprime</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Students Tab -->
+  <div id="Students" class="tabcontent">
+    <div class="form-container">
+      <h2>Shto/Fshi Nxënës</h2>
+      <input type="text" id="student-name" placeholder="Emri i Nxënësit" required>
+      <input type="text" id="student-class" placeholder="Klasa" required>
+      <button onclick="addStudent()">Shto Nxënës</button>
+    </div>
+    <h2>Lista e Nxënësve</h2>
+    <table id="students-table">
+      <thead>
+        <tr>
+          <th>Emri</th>
+          <th>Klasa</th>
+          <th>Veprime</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Base URLs for Firebase Realtime Database
+    const BOOKS_DB_URL = 'https://library-system-18d69-default-rtdb.europe-west1.firebasedatabase.app/books';
+    const BORROW_REQUESTS_URL = 'https://library-system-18d69-default-rtdb.europe-west1.firebasedatabase.app/borrow_requests';
+    const STUDENTS_DB_URL = 'https://library-system-18d69-default-rtdb.europe-west1.firebasedatabase.app/students';
+
+    // Global variable to store books for teacher search
+    let booksData = {};
+    let currentUser = null;
+
+    // ------------------------------
+    // TAB FUNCTIONALITY
+    // ------------------------------
+    function openTab(evt, tabName) {
+      let i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+
+      if (tabName === 'BookCatalog') {
+        fetchBooks();
+      } else if (tabName === 'BorrowRequests') {
+        fetchBorrowRequests();
+      } else if (tabName === 'Students') {
+        fetchStudents();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      // Open the first tab by default
+      document.querySelector('.tab button').click();
+    });
+
+    // ------------------------------
+    // BOOK CATALOG FUNCTIONS (with inline editing)
+    // ------------------------------
+    let editCache = {};  // Cache original row HTML for canceling edits
+
+    async function fetchBooks() {
+      try {
+        const response = await fetch(`${BOOKS_DB_URL}.json`);
+        const data = await response.json();
+        booksData = data || {};
+        renderBooks(booksData);
+      } catch (error) {
+        console.error("Gabim gjatë marrjes së librave:", error);
+      }
+    }
+
+    function renderBooks(data) {
+      const bookTableBody = document.querySelector('#book-table tbody');
+      bookTableBody.innerHTML = '';
+      if (data) {
+        Object.entries(data).forEach(([id, book]) => {
+          const row = document.createElement('tr');
+          row.id = "book-row-" + id;
+          row.innerHTML = `
+            <td class="book-title">${book.title}</td>
+            <td class="book-author">${book.author}</td>
+            <td class="book-genre">${book.genre || 'N/A'}</td>
+            <td class="book-description">${book.description || 'N/A'}</td>
+            <td class="book-recommended">${book.recommended || 'N/A'}</td>
+            <td class="book-quantity">${book.quantity || '0'}</td>
+            <td>
+              <button onclick="editBook('${id}')" class="edit-button">Modifiko</button>
+              <button onclick="deleteBook('${id}')" class="delete">Fshi</button>
+            </td>`;
+          bookTableBody.appendChild(row);
+        });
+      }
+    }
+
+    // Diacritic-insensitive search for Book Catalog
+    function removeDiacritics(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function searchBooksTeacher() {
+      const query = document.getElementById('teacher-book-search').value.toLowerCase();
+      const normalizedQuery = removeDiacritics(query);
+      const filtered = {};
+      Object.entries(booksData).forEach(([id, book]) => {
+        const combined = removeDiacritics(((book.title || '') + ' ' + (book.author || '') + ' ' + (book.genre || '')).toLowerCase());
+        if (combined.includes(normalizedQuery)) {
+          filtered[id] = book;
+        }
+      });
+      renderBooks(filtered);
+    }
+
+    async function addBook() {
+      const title = document.getElementById('add-book-title').value.trim();
+      const author = document.getElementById('add-book-author').value.trim();
+      const genre = document.getElementById('add-book-genre').value.trim();
+      const description = document.getElementById('add-book-description').value.trim();
+      const recommended = document.getElementById('add-book-recommended').value.trim();
+      const quantity = parseInt(document.getElementById('add-book-quantity').value);
+
+      if (!title || !author || isNaN(quantity)) {
+        alert('Ju lutem plotësoni të gjitha fushat e domosdoshme!');
+        return;
+      }
+
+      const bookData = { title, author, genre, description, recommended, quantity };
+
+      try {
+        await fetch(`${BOOKS_DB_URL}.json`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(bookData)
+        });
+        alert('Libri u shtua me sukses!');
+        fetchBooks();
+      } catch (error) {
+        console.error('Gabim gjatë shtimit të librit:', error);
+      }
+    }
+
+    async function deleteBook(bookId) {
+      if (!confirm('A jeni të sigurt që dëshironi të fshini këtë libër?')) return;
+      try {
+        await fetch(`${BOOKS_DB_URL}/${bookId}.json`, { method: 'DELETE' });
+        alert('Libri u fshi me sukses!');
+        fetchBooks();
+      } catch (error) {
+        console.error('Gabim gjatë fshirjes së librit:', error);
+      }
+    }
+
+    function editBook(bookId) {
+      const row = document.getElementById("book-row-" + bookId);
+      // Cache original HTML for cancellation
+      editCache[bookId] = row.innerHTML;
+
+      const title = row.querySelector('.book-title').innerText;
+      const author = row.querySelector('.book-author').innerText;
+      const genre = row.querySelector('.book-genre').innerText;
+      const description = row.querySelector('.book-description').innerText;
+      const recommended = row.querySelector('.book-recommended').innerText;
+      const quantity = row.querySelector('.book-quantity').innerText;
+
+      row.querySelector('.book-title').innerHTML = `<input class="edit-input" type="text" id="edit-title-${bookId}" value="${title}">`;
+      row.querySelector('.book-author').innerHTML = `<input class="edit-input" type="text" id="edit-author-${bookId}" value="${author}">`;
+      row.querySelector('.book-genre').innerHTML = `<input class="edit-input" type="text" id="edit-genre-${bookId}" value="${genre}">`;
+      row.querySelector('.book-description').innerHTML = `<textarea class="edit-textarea" id="edit-description-${bookId}">${description}</textarea>`;
+      row.querySelector('.book-recommended').innerHTML = `<input class="edit-input" type="text" id="edit-recommended-${bookId}" value="${recommended}">`;
+      row.querySelector('.book-quantity').innerHTML = `<input class="edit-input" type="number" id="edit-quantity-${bookId}" value="${quantity}" min="0">`;
+
+      // Change actions: replace with Save and Cancel buttons with new styling.
+      row.cells[6].innerHTML = `
+          <button class="edit-button" onclick="saveBook('${bookId}')">Ruaj</button>
+          <button class="edit-button cancel" onclick="cancelEdit('${bookId}')">Anulo</button>`;
+    }
+
+    async function saveBook(bookId) {
+      const updatedData = {
+        title: document.getElementById(`edit-title-${bookId}`).value.trim(),
+        author: document.getElementById(`edit-author-${bookId}`).value.trim(),
+        genre: document.getElementById(`edit-genre-${bookId}`).value.trim(),
+        description: document.getElementById(`edit-description-${bookId}`).value.trim(),
+        recommended: document.getElementById(`edit-recommended-${bookId}`).value.trim(),
+        quantity: parseInt(document.getElementById(`edit-quantity-${bookId}`).value)
+      };
+
+      if (!updatedData.title || !updatedData.author || isNaN(updatedData.quantity)) {
+        alert("Ju lutem plotësoni fushat e domosdoshme!");
+        return;
+      }
+
+      try {
+        await fetch(`${BOOKS_DB_URL}/${bookId}.json`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedData)
+        });
+        alert("Libri u përditësua me sukses!");
+        fetchBooks();
+      } catch (error) {
+        console.error("Gabim gjatë përditësimit të librit:", error);
+        alert("Gabim gjatë përditësimit të librit.");
+      }
+    }
+
+    function cancelEdit(bookId) {
+      if (editCache[bookId]) {
+        const row = document.getElementById("book-row-" + bookId);
+        row.innerHTML = editCache[bookId];
+        delete editCache[bookId];
+      } else {
+        fetchBooks();
+      }
+    }
+
+    // ------------------------------
+    // BORROW REQUESTS FUNCTIONS
+    // ------------------------------
+    async function fetchBorrowRequests() {
+      const response = await fetch(`${BORROW_REQUESTS_URL}.json`);
+      const data = await response.json();
+      const borrowTableBody = document.querySelector('#borrow-requests-table tbody');
+      borrowTableBody.innerHTML = '';
+      if (data) {
+        Object.entries(data).forEach(([id, request]) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${request.bookTitle}</td>
+            <td>${request.borrowerName}</td>
+            <td>${request.borrowerClass}</td>
+            <td>${request.date} ${request.time}</td>
+            <td>${translateStatus(request.status)}</td>
+            <td>
+              <button onclick="approveRequest('${id}')" class="delete">Mirato</button>
+              <button onclick="rejectRequest('${id}')" class="delete">Refuzo</button>
+              <button onclick="deleteBorrowRequest('${id}')" class="delete">Fshi</button>
+            </td>`;
+          borrowTableBody.appendChild(row);
+        });
+      }
+    }
+
+    async function approveRequest(requestId) {
+      await updateBorrowRequestStatus(requestId, 'Approved');
+    }
+
+    async function rejectRequest(requestId) {
+      await updateBorrowRequestStatus(requestId, 'Rejected');
+    }
+
+    async function updateBorrowRequestStatus(requestId, status) {
+      try {
+        await fetch(`${BORROW_REQUESTS_URL}/${requestId}.json`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        alert(`Kërkesa u ${status.toLowerCase()} me sukses!`);
+        fetchBorrowRequests();
+      } catch (error) {
+        console.error("Gabim gjatë ndryshimit të statusit të kërkesës:", error);
+      }
+    }
+
+    async function deleteBorrowRequest(requestId) {
+      if (!confirm('A jeni të sigurt për fshirjen e kësaj kërkese?')) return;
+      try {
+        await fetch(`${BORROW_REQUESTS_URL}/${requestId}.json`, { method: 'DELETE' });
+        alert('Kërkesa u fshi me sukses!');
+        fetchBorrowRequests();
+      } catch (error) {
+        console.error("Gabim gjatë fshirjes së kërkesës:", error);
+        alert("Gabim gjatë fshirjes së kërkesës.");
+      }
+    }
+
+    // ------------------------------
+    // STUDENTS FUNCTIONS
+    // ------------------------------
+    async function fetchStudents() {
+      const response = await fetch(`${STUDENTS_DB_URL}.json`);
+      const data = await response.json();
+      const studentTableBody = document.querySelector('#students-table tbody');
+      studentTableBody.innerHTML = '';
+      if (data) {
+        Object.entries(data).forEach(([id, student]) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${student.name}</td>
+            <td>${student.class}</td>
+            <td><button onclick="deleteStudent('${id}')" class="delete">Fshi</button></td>`;
+          studentTableBody.appendChild(row);
+        });
+      }
+    }
+
+    async function addStudent() {
+      const name = document.getElementById('student-name').value.trim();
+      const studentClass = document.getElementById('student-class').value.trim();
+      if (!name || !studentClass) {
+        alert('Ju lutem plotësoni të gjitha fushat!');
+        return;
+      }
+      const studentData = { name, class: studentClass };
+      try {
+        await fetch(`${STUDENTS_DB_URL}.json`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(studentData)
+        });
+        alert('Nxënësi u shtua me sukses!');
+        fetchStudents();
+      } catch (error) {
+        console.error('Gabim gjatë shtimit të nxënësit:', error);
+      }
+    }
+
+    async function deleteStudent(studentId) {
+      if (!confirm('A jeni të sigurt që dëshironi të fshini këtë nxënës?')) return;
+      try {
+        await fetch(`${STUDENTS_DB_URL}/${studentId}.json`, { method: 'DELETE' });
+        alert('Nxënësi u fshi me sukses!');
+        fetchStudents();
+      } catch (error) {
+        console.error('Gabim gjatë fshirjes së nxënësit:', error);
+      }
+    }
+
+    // ------------------------------
+    // UTILITY: Translate status to Albanian
+    // ------------------------------
+    function translateStatus(status) {
+      switch (status) {
+        case "Pending":
+          return "Në pritje";
+        case "Approved":
+          return "I/E pranuar";
+        case "Rejected":
+          return "I/E refuzuar";
+        default:
+          return status;
+      }
+    }
+
+    // ------------------------------
+    // LOGOUT FUNCTION
+    // ------------------------------
+    function logout() {
+      window.signOut(window.auth)
+        .then(() => {
+          alert("Ju keni dalur nga faqja ueb.");
+          location.reload();
+        })
+        .catch(error => {
+          console.error("Gabim gjatë daljes nga sistemi:", error);
+          alert("Gabim gjatë daljes nga sistemi.");
+        });
+    }
+
+    // ------------------------------
+    // TEACHER BOOK SEARCH (DIACRITIC-INSENSITIVE)
+    // ------------------------------
+    function removeDiacritics(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function searchBooksTeacher() {
+      const query = document.getElementById('teacher-book-search').value.toLowerCase();
+      const normalizedQuery = removeDiacritics(query);
+      const filtered = {};
+      Object.entries(booksData).forEach(([id, book]) => {
+        const combined = removeDiacritics(((book.title || '') + ' ' + (book.author || '') + ' ' + (book.genre || '')).toLowerCase());
+        if (combined.includes(normalizedQuery)) {
+          filtered[id] = book;
+        }
+      });
+      renderBooks(filtered);
+    }
+
+    // ------------------------------
+    // INITIALIZATION
+    // ------------------------------
+    window.onload = () => {
+      // Listen for authentication state changes.
+      if (window.auth && window.onAuthStateChanged) {
+        window.onAuthStateChanged(window.auth, user => {
+          if (user) {
+            document.getElementById('username').textContent = user.displayName || "Student";
+          } else {
+            alert("Nuk jeni kyçur. Ju lutem identifikohuni.");
+          }
+        });
+      }
+    };
+  </script>
+</body>
+
+</html>

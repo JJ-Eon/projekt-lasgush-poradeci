@@ -6,16 +6,16 @@
     <title>Shkolla Lasgush Poradeci</title>
     <meta name="description" content="Faqja zyrtare e Shkollës 9-vjeçare 'Lasgush Poradeci' - Institucion Arsimor Publik.">
     
-    <!-- Tailwind CSS -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fonts -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons (Vanilla) -->
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Tailwind Config -->
+    
     <script>
       tailwind.config = {
         theme: {
@@ -26,22 +26,22 @@
             },
             colors: {
               primary: {
-                50: '#faf6f3',  /* Very warm white */
-                100: '#f5efe9', /* Light beige */
+                50: '#faf6f3',  
+                100: '#f5efe9', 
                 200: '#e6d8cc',
                 300: '#d5bba8',
                 400: '#c29d82',
-                500: '#a67c52', /* Medium wood */
-                600: '#8a6242', /* Wood */
-                700: '#734e35', /* Dark wood */
+                500: '#a67c52', 
+                600: '#8a6242', 
+                700: '#734e35', 
                 800: '#5e402e',
-                900: '#4d3528', /* Very dark wood */
+                900: '#4d3528', 
                 950: '#2a1b15',
               },
               accent: {
                 50: '#fffbeb',
                 100: '#fef3c7',
-                500: '#d97706', /* Warm Amber */
+                500: '#d97706', 
                 600: '#b45309',
                 700: '#92400e',
               },
@@ -94,13 +94,13 @@
           scrollbar-width: none;
       }
 
-      /* Keyboard Accessibility: Visible Focus */
+      
       *:focus-visible {
         outline: 3px solid #d97706;
         outline-offset: 2px;
       }
       
-      /* Skip Link */
+      
       .skip-link {
         position: absolute;
         top: -100%;
@@ -115,7 +115,7 @@
         top: 0;
       }
 
-      /* High Contrast Mode Overrides */
+      
       body.high-contrast {
         background-color: #ffffff !important;
         color: #000000 !important;
@@ -132,7 +132,7 @@
       body.high-contrast .bg-primary-950,
       body.high-contrast .bg-accent-600 {
         background-color: #000000 !important;
-        color: #ffff00 !important; /* Yellow text on black for readability */
+        color: #ffff00 !important; 
         border: 2px solid #ffffff !important;
       }
       
@@ -202,7 +202,7 @@
         40% { transform: scale(1); }
       }
 
-      /* CSS Pattern for backgrounds */
+      
       .pattern-dots {
         background-image: radial-gradient(#ffffff 1px, transparent 1px);
         background-size: 20px 20px;
@@ -212,12 +212,12 @@
 </head>
   <body class="bg-[#faf6f3] text-stone-900 min-h-screen flex flex-col overflow-x-hidden selection:bg-accent-200 selection:text-primary-900">
 
-    <!-- Skip to Main Content Link -->
+    
     <a href="#main-content" class="skip-link text-primary-900 focus:outline-none focus:ring-4 focus:ring-accent-500 rounded-br-lg shadow-xl">
       Kalo te përmbajtja kryesore
     </a>
 
-    <!-- Notification Toast -->
+    
     <div id="toast" class="fixed top-28 right-4 z-[70] transform translate-x-full transition-transform duration-300 ease-out pointer-events-none" role="alert" aria-live="assertive">
       <div class="bg-white text-stone-800 px-6 py-4 rounded-xl shadow-2xl flex items-center border border-primary-100 border-l-4 border-l-accent-500 pointer-events-auto">
         <div class="bg-accent-50 p-2 rounded-full mr-3">
@@ -307,7 +307,7 @@
                 <span class="block text-primary-200 mt-4 text-2xl sm:text-3xl font-sans font-normal tracking-wide opacity-90">Institucion Arsimor Publik</span>
               </h1>
               <p class="mt-8 max-w-md mx-auto text-base text-primary-100 sm:text-lg md:text-xl md:max-w-3xl leading-relaxed reveal-on-scroll delay-200">
-                Mirësevini në vatrën e dijes. Ne ofrojmë një mjedis gjithëpërfshirës ku çdo nxënës inkurajohet të zbulojë potencialin e tij të plotë.
+                Mirë se vini në vatrën e dijes. Ne ofrojmë një mjedis gjithëpërfshirës ku çdo nxënës inkurajohet të zbulojë potencialin e tij të plotë.
               </p>
               <div class="mt-12 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center gap-4 reveal-on-scroll delay-300">
                 <button onclick="app.navigateTo('library')" class="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-full text-primary-900 bg-[#fdfbf7] hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] md:px-10">
@@ -375,7 +375,7 @@
                     <h2 class="text-2xl font-bold text-[#fdfbf7] sm:text-3xl font-serif tracking-wide">Biblioteka Digjitale</h2>
                   </div>
                   <p class="mt-4 text-lg text-primary-100/90 leading-relaxed max-w-2xl">
-                    Sistemi ynë i ri i menaxhimit të bibliotekës është tani online. Rezervoni libra, kontrolloni afatet dhe eksploroni katalogun nga shtëpia.
+                    Sistemi ynë i ri i menaxhimit të bibliotekës. Rezervoni libra, kontrolloni afatet dhe eksploroni katalogun nga shtëpia.
                   </p>
                 </div>
                 <div class="mt-10 md:mt-0 md:ml-8 flex justify-center z-10">
